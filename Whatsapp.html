@@ -1,16 +1,23 @@
-<button onclick="sendWhatsApp()">Send WhatsApp Message</button>
+<button onclick="sendToWhatsAppGroup()">Send to WhatsApp Group</button>
 
 <script>
-function sendWhatsApp() {
-    // Replace with the actual phone number (with country code, no + or spaces)
-    const phoneNumber = '919965635037';
+function sendToWhatsAppGroup() {
+    // Method 1: Using group invite link (recommended)
+    const groupInviteLink = 'https://chat.whatsapp.com/D26gxyKAe1BBG6qgzJtNzb?mode=r_c';
+    
+    // Method 2: Using group ID (alternative)
+    // const groupId = 'D26gxyKAe1BBG6qgzJtNzb'; // Group ID usually starts with a number and ends with @g.us
+    
     // Your pre-filled message
-    const message = 'Hello, this is a test message';
+    const message = 'Hello, this is a test message to the group! with InviteLink';
     
     // Encode the message for URL
     const encodedMessage = encodeURIComponent(message);
     
-    // Open WhatsApp Web/App with the message
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    // Open WhatsApp with the group chat
+    window.open(`${groupInviteLink}?text=${encodedMessage}`, '_blank');
+    
+    // If using group ID:
+    // window.open(`https://wa.me/chat/${groupId}?text=${encodedMessage}`, '_blank');
 }
 </script>
