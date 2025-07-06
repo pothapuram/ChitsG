@@ -108,6 +108,7 @@ function showSheet(sheetIndex) {
         // Create table
         const table = document.createElement('table');
         table.className = 'excel-table';
+        table.id = 'members';
         
         // Create header row if data exists
         if (data.length > 0) {
@@ -126,13 +127,43 @@ function showSheet(sheetIndex) {
         
         // Create data rows
         if (data.length > 1) {
+            debugger;
             const tbody = document.createElement('tbody');
             for (let i = 1; i < data.length; i++) {
                 const row = document.createElement('tr');
                 data[i].forEach((cell, colIndex) => {
                     const td = document.createElement('td');
-                    td.textContent = cell;
-                    row.appendChild(td);
+                    if(cell === "சீட்டு எடுக்காதவர்கள்")
+                    {
+                        td.colSpan = 3;
+                        td.style.fontWeight = "bold";
+                        td.style.textAlign = "center";
+                        td.textContent = cell;
+                        row.appendChild(td);
+                        return;
+                    }
+                    else if(cell === "S.No" || cell === "Name" || cell === "Mobile Number")
+                    {
+                        td.style.fontWeight = "bold";
+                        td.style.textAlign = "center";
+                        td.textContent = cell;
+                        row.appendChild(td);
+                        return;
+                    }
+                    // else if(typeof cell === 'number' && !isNaN(cell))
+                    // {
+                    //     // td.appendChild(document.createElement('a').textContent = `tel:${cell}`)
+                    //     // td.appendChild(document.createElement('a').href = `tel:${cell}`)
+                    //      td.style.fontWeight = "bold";
+                    //      td.style.textAlign = "center";
+                    //      td.textContent = cell;
+                    //     row.appendChild(td);
+                    //     return;
+                    // }
+                    else{
+                        td.textContent = cell;
+                        row.appendChild(td);
+                    }
                 });
                 tbody.appendChild(row);
             }
