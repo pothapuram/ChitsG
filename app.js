@@ -129,10 +129,22 @@ function showSheet(sheetIndex) {
         if (data.length > 1) {
             debugger;
             const tbody = document.createElement('tbody');
+            let isMobileNumber = false;
             for (let i = 1; i < data.length; i++) {
                 const row = document.createElement('tr');
                 data[i].forEach((cell, colIndex) => {
                     const td = document.createElement('td');
+
+                    if(cell === "Total Amount Paid Per Head :")
+                        {
+                            td.colSpan = 2;
+                            td.style.fontWeight = "bold";
+                            td.style.textAlign = "right";
+                            td.textContent = cell;
+                            row.appendChild(td);
+                            return;
+                        }
+
                     if(cell === "சீட்டு எடுக்காதவர்கள்")
                     {
                         td.colSpan = 3;
@@ -148,18 +160,20 @@ function showSheet(sheetIndex) {
                         td.style.textAlign = "center";
                         td.textContent = cell;
                         row.appendChild(td);
+                        isMobileNumber = true;
                         return;
                     }
-                    // else if(typeof cell === 'number' && !isNaN(cell))
-                    // {
-                    //     // td.appendChild(document.createElement('a').textContent = `tel:${cell}`)
-                    //     // td.appendChild(document.createElement('a').href = `tel:${cell}`)
-                    //      td.style.fontWeight = "bold";
-                    //      td.style.textAlign = "center";
-                    //      td.textContent = cell;
-                    //     row.appendChild(td);
-                    //     return;
-                    // }
+                    else if(isMobileNumber && colIndex === 2 && typeof cell === 'number' && !isNaN(cell))
+                    {
+                         //td.appendChild(document.createElement('a').textContent = `tel:${cell}`)
+                         //td.appendChild(document.createElement('a').href = `tel:${cell}`)
+                         td.appendChild(Object.assign(document.createElement('a'), { href: `tel:${cell}`, textContent: cell }));
+                         //td.style.fontWeight = "bold";
+                         td.style.textAlign = "left";
+                         //td.textContent = cell;
+                        row.appendChild(td);
+                        return;
+                    }
                     else{
                         td.textContent = cell;
                         row.appendChild(td);
