@@ -166,7 +166,7 @@ function showSheet(sheetIndex) {
                     {
                         if(colIndex === 2)
                         {
-                            td.appendChild(Object.assign(document.createElement('input'), { id : `beatAmount`, type : `number`, className : `form-control`, onkeyup: (e) => beatAmountChange(e, 530000, memberCount)}));
+                            td.appendChild(Object.assign(document.createElement('input'), { id : `beatAmount`, type : `number`, style: `width: 100%;`, className : `form-control`, onkeyup: (e) => beatAmountChange(e, 530000, memberCount)}));
                         }
                         else if(colIndex === 3)
                         {
