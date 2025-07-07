@@ -93,6 +93,20 @@ async function loadExcelFromDrive() {
     }
 }
 
+function beatAmountChange(event, totalAmount, memberCount)
+{
+    var x = document.getElementById("beatAmount").value;
+    if(x > 0)
+    {
+        document.getElementById("inHandAmount").innerHTML = totalAmount - x;
+        document.getElementById("perHead").innerHTML = Math.round((totalAmount - x) / memberCount);
+    }
+    else
+    {
+        document.getElementById("inHandAmount").innerHTML = "";
+        document.getElementById("perHead").innerHTML = "";
+    }
+}
 // Function to display sheet data in a table
 function showSheet(sheetIndex) {
     const container = document.getElementById('sheet-container');
@@ -112,9 +126,17 @@ function showSheet(sheetIndex) {
         
         // Create header row if data exists
         if (data.length > 0) {
+            debugger;
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
-            
+            // for (let i = 0; i < 2; i++) {
+            //     data[i].forEach((header, colIndex) => {
+            //         const th = document.createElement('th');
+            //         th.textContent = header || `Column ${colIndex + 1}`;
+            //         headerRow.appendChild(th);
+            //     });
+            //     thead.appendChild(headerRow);
+            // }
             data[0].forEach((header, colIndex) => {
                 const th = document.createElement('th');
                 th.textContent = header || `Column ${colIndex + 1}`;
@@ -131,20 +153,41 @@ function showSheet(sheetIndex) {
             const tbody = document.createElement('tbody');
             let isMobileNumber = false;
             let skipIterationCount = 0;
+            let isInputRowAdded = false;
+            let totalAmount = 530000;
+            let memberCount = 0;
+            let isMemberCountUpdated = false;
             for (let i = 1; i < data.length; i++) {
                 const row = document.createElement('tr');
                 data[i].forEach((cell, colIndex) => {
                     const td = document.createElement('td');
 
-                    if(cell === "Total Amount Paid Per Head :")
+                    if((colIndex === 2 || colIndex === 3 || colIndex === 4) && cell === "" && !isInputRowAdded)
+                    {
+                        if(colIndex === 2)
                         {
-                            td.colSpan = 2;
+                            td.appendChild(Object.assign(document.createElement('input'), { id : `beatAmount`, type : `number`, className : `form-control`, onkeyup: (e) => beatAmountChange(e, 530000, memberCount)}));
+                        }
+                        else if(colIndex === 3)
+                        {
+                            td.appendChild(Object.assign(document.createElement('p'), { id : `inHandAmount`}));
+                        }
+                        else if(colIndex === 4)
+                        {
+                            td.appendChild(Object.assign(document.createElement('p'), { id : `perHead`}));
+                            isInputRowAdded = true
+                        }
+                        row.appendChild(td);
+                    }
+                    else if(cell === "Total Amount Paid Per Head :")
+                        {
+                            td.colSpan = 3;
                             td.style.fontWeight = "bold";
                             td.style.textAlign = "right";
                             td.textContent = cell;
                             row.appendChild(td);
-                            skip1IterationforTotalAmountPaidPerHead = true;
-                            skipIterationCount = 1;
+                            skipIterationCount = 2;
+                            isMemberCountUpdated = true;
                             return;
                         }
                     else if(cell === "சீட்டு எடுக்காதவர்கள்")
@@ -183,6 +226,11 @@ function showSheet(sheetIndex) {
                             skipIterationCount = skipIterationCount - 1;
                         }
                 });
+
+                if(!isMemberCountUpdated)
+                {
+                    memberCount = memberCount + 1;
+                }
                 tbody.appendChild(row);
             }
             table.appendChild(tbody);
